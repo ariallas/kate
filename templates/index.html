@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Shitty App</title>
+</head>
+<body>
+    <div class="content">
+    <form method="post">
+        <p>
+            <b><label for="userInput">Input something here</label></b>
+        </p>
+        <p>
+            <input type="text" name="userInput"
+                placeholder="Random Input"></input>
+        </p>
+        <button type="submit">Submit</button>
+    </form>
+    </div>
+    {% for input in inputs %}
+        <div class="inputs">
+            <p>{{ input['input'] }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>
