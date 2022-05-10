@@ -1,21 +1,9 @@
-# import http.server
-# import socketserver
-# import socket
-
-# PORT = 30001
-
-# Handler = http.server.SimpleHTTPRequestHandler
-
-# with socketserver.TCPServer(("", PORT), Handler) as httpd:
-#     print("serving at port", PORT)
-#     print(socket.gethostbyname(socket.gethostname()))
-#     httpd.serve_forever()
-
 from flask import Flask, render_template, request, url_for, redirect
 from pymongo import MongoClient
+import socket
 
 app = Flask(__name__)
-client = MongoClient('localhost', 27017)
+client = MongoClient('10.109.81.251', 27017)
 
 db = client.flask_db
 inputs = db.inputs
@@ -28,4 +16,7 @@ def index():
         return redirect(url_for('index'))
 
     all_inputs = inputs.find()
-    return render_template('index.html', inputs=all_inputs)
+    return render_template('index.html', inputs=all_inputs, hostname=socket.gethostname())
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0', port=8080)

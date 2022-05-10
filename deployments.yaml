@@ -33,17 +33,3 @@ spec:
       containers:
         - name: kate-mongo
           image: mongo:4.4.14-rc0-focal
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: kate-service
-  namespace: default
-spec:
-  type: NodePort
-  selector:
-    app: kate-server
-  ports:
-  - port: 80
-    targetPort: 30001
-    nodePort: 30001
