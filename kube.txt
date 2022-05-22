@@ -1,0 +1,40 @@
+docker run --rm --publish 27017:27017 mongo:4.4.14-rc0-focal
+docker run --publish 80:80 --rm test
+kubectl exec --stdin --tty  -- /bin/bash
+kubectl taint node kube1 node-role.kubernetes.io/master:NoSchedule-
+sudo route add -net 10.244.1.0/24 gw 192.168.20.20
+
+
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+sudo kubeadm join 192.168.20.10:6443 --token c6xrbz.px9dzvr2726856mr \
+        --discovery-token-ca-cert-hash sha256:b240b7c5284158595c95040efdc37bba61c535bfe1b9807db7a130d6962eb54e
+
+
+cat > /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"]
+}
+EOF
+sudo systemctl restart docker
+
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=NumCPU --apiserver-advertise-address=192.168.20.10
+
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
