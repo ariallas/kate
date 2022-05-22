@@ -3,7 +3,7 @@ from pymongo import MongoClient
 import socket
 
 app = Flask(__name__)
-client = MongoClient('10.109.81.251', 27017)
+client = MongoClient('kate-mongo-service.default.svc.cluster.local', 27017)
 
 db = client.flask_db
 inputs = db.inputs

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 metadata:
   name: kate-server
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: kate-server
@@ -33,3 +33,11 @@ spec:
       containers:
         - name: kate-mongo
           image: mongo:4.4.14-rc0-focal
+          args: ["--dbpath","/data/db"]
+          volumeMounts:
+          - name: "mongo-data-dir"
+            mountPath: "/data/db"
+      volumes:
+        - name: "mongo-data-dir"
+          persistentVolumeClaim:
+            claimName: "mongo-volume-claim"
